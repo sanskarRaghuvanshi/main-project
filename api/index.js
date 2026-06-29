@@ -4,20 +4,20 @@ dns.setServers(['8.8.8.8', '8.8.4.4']);
 import express from 'express';
 import cors from 'cors';
 import 'dotenv/config';
-import connectDB from './config/db.js';
-import { errorHandler } from './middleware/utils.js';
+import connectDB from '../backend/config/db.js';
+import { errorHandler } from '../backend/middleware/utils.js';
 
-import authRoutes from './routes/auth.js';
-import productRoutes from './routes/products.js';
-import orderRoutes from './routes/orders.js';
-import reviewRoutes from './routes/reviews.js';
-import blogRoutes from './routes/blog.js';
-import couponRoutes from './routes/coupons.js';
-import quizRoutes from './routes/quiz.js';
-import cartRoutes from './routes/cart.js';
-import wishlistRoutes from './routes/wishlist.js';
-import adminRoutes from './routes/admin.js';
-import uploadRoutes from './routes/upload.js';
+import authRoutes from '../backend/routes/auth.js';
+import productRoutes from '../backend/routes/products.js';
+import orderRoutes from '../backend/routes/orders.js';
+import reviewRoutes from '../backend/routes/reviews.js';
+import blogRoutes from '../backend/routes/blog.js';
+import couponRoutes from '../backend/routes/coupons.js';
+import quizRoutes from '../backend/routes/quiz.js';
+import cartRoutes from '../backend/routes/cart.js';
+import wishlistRoutes from '../backend/routes/wishlist.js';
+import adminRoutes from '../backend/routes/admin.js';
+import uploadRoutes from '../backend/routes/upload.js';
 
 const app = express();
 
