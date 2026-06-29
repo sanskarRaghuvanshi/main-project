@@ -1,0 +1,16 @@
+{
+  "name": "opal-ecommerce",
+  "private": true,
+  "scripts": {
+    "dev": "cd api && npm run dev",
+    "dev:client": "cd client && npm run dev",
+    "build": "cd client && npm install && npm run build",
+    "start": "cd api && node index.js",
+    "seed": "node scripts/seed.js",
+    "seed:products": "node scripts/seedProducts.js",
+    "seed:products-extra": "node scripts/seedProductsExtra.js",
+    "seed:coupons": "node scripts/seedCoupons.js",
+    "seed:blogs": "node scripts/seedBlogs.js",
+    "seed:all": "node scripts/seedProducts.js && node scripts/seedProductsExtra.js && node scripts/seedCoupons.js && node scripts/seedBlogs.js"
+  }
+}
