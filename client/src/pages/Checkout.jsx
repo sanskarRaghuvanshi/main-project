@@ -21,7 +21,7 @@ const Checkout = () => {
       const orderItems = items.map(i => ({ productId: i.productId?._id || i.productId, name: i.productId?.name || i.name, image: i.productId?.images?.[0] || '', variant: i.variant || '', price: i.price || i.productId?.variants?.[0]?.price || 0, quantity: i.quantity }));
       const r = await API.post('/orders', { items: orderItems, address, paymentMethod: payment, subtotal, couponCode: coupon?.code, deliveryFee: 0, discount, total });
       if (r.data.data?.razorpayOrderId) {
-        const opts = { key: 'rzp_test_T4YctQuzWnebkd', amount: r.data.data.amount, currency: 'INR', name: 'Opal Beauty', order_id: r.data.data.razorpayOrderId, handler: async (resp) => { try { await API.post('/orders/payment/verify', resp); clearCart(); navigate(`/order-confirmed/${r.data.data.order._id}`); } catch { toast.error('Payment failed'); } }, prefill: { name: address.name, contact: address.phone }, theme: { color: '#FF4D8B' } };
+        const opts = { key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_T4YctQuzWnebkd', amount: r.data.data.amount, currency: 'INR', name: 'Opal Beauty', order_id: r.data.data.razorpayOrderId, handler: async (resp) => { try { await API.post('/orders/payment/verify', resp); clearCart(); navigate(`/order-confirmed/${r.data.data.order._id}`); } catch { toast.error('Payment failed'); } }, prefill: { name: address.name, contact: address.phone }, theme: { color: '#FF4D8B' } };
         const rzp = new window.Razorpay(opts);
         rzp.open();
       } else { clearCart(); navigate(`/order-confirmed/${r.data.data._id}`); }
