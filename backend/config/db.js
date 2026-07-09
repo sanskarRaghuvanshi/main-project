@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+mongoose.set('bufferCommands', false);
 
 let cached = global._mongooseConn;
 if (!cached) cached = global._mongooseConn = { conn: null, promise: null };

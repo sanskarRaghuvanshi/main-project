@@ -49,6 +49,11 @@ app.use(session({ secret: process.env.JWT_SECRET, resave: false, saveUninitializ
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(async (_req, _res, next) => {
+  try { await connectDB(); } catch { /* DB unreachable — errors surface in controllers */ }
+  next();
+});
+
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
@@ -63,10 +68,13 @@ app.use('/api/upload', uploadRoutes);
 app.use('/api/returns', returnRoutes);
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok', time: new Date().toISOString() }));
-
-app.use(async (_req, _res, next) => {
-  try { await connectDB(); } catch { /* DB unreachable — errors surface in controllers */ }
-  next();
+app.get('/api/dbcheck', async (req, res) => {
+  try {
+    await connectDB();
+    res.json({ success: true, message: 'MongoDB connected' });
+  } catch (err) {
+    res.json({ success: false, error: err.message, name: err.name, code: err.code });
+  }
 });
 
 app.use(errorHandler);
