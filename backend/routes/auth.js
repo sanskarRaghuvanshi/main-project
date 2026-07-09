@@ -14,14 +14,18 @@ router.put('/me', protect, updateProfile);
 router.post('/address', protect, addAddress);
 router.delete('/address/:id', protect, deleteAddress);
 
-router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'], session: false }));
-router.get('/google/callback', passport.authenticate('google', { session: false, failureRedirect: `${process.env.CLIENT_URL}/login?error=google` }), (req, res) => {
-  res.redirect(`${process.env.CLIENT_URL}/auth/social?token=${req.user.token}&user=${encodeURIComponent(JSON.stringify(req.user.user))}`);
-});
+if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+  router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'], session: false }));
+  router.get('/google/callback', passport.authenticate('google', { session: false, failureRedirect: `${process.env.CLIENT_URL}/login?error=google` }), (req, res) => {
+    res.redirect(`${process.env.CLIENT_URL}/auth/social?token=${req.user.token}&user=${encodeURIComponent(JSON.stringify(req.user.user))}`);
+  });
+}
 
-router.get('/facebook', passport.authenticate('facebook', { scope: ['email'], session: false }));
-router.get('/facebook/callback', passport.authenticate('facebook', { session: false, failureRedirect: `${process.env.CLIENT_URL}/login?error=facebook` }), (req, res) => {
-  res.redirect(`${process.env.CLIENT_URL}/auth/social?token=${req.user.token}&user=${encodeURIComponent(JSON.stringify(req.user.user))}`);
-});
+if (process.env.FACEBOOK_APP_ID && process.env.FACEBOOK_APP_SECRET) {
+  router.get('/facebook', passport.authenticate('facebook', { scope: ['email'], session: false }));
+  router.get('/facebook/callback', passport.authenticate('facebook', { session: false, failureRedirect: `${process.env.CLIENT_URL}/login?error=facebook` }), (req, res) => {
+    res.redirect(`${process.env.CLIENT_URL}/auth/social?token=${req.user.token}&user=${encodeURIComponent(JSON.stringify(req.user.user))}`);
+  });
+}
 
 export default router;
