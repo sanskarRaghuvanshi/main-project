@@ -68,14 +68,6 @@ app.use('/api/upload', uploadRoutes);
 app.use('/api/returns', returnRoutes);
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok', time: new Date().toISOString() }));
-app.get('/api/dbcheck', async (req, res) => {
-  try {
-    await connectDB();
-    res.json({ success: true, message: 'MongoDB connected' });
-  } catch (err) {
-    res.json({ success: false, error: err.message, name: err.name, code: err.code });
-  }
-});
 
 app.use(errorHandler);
 
