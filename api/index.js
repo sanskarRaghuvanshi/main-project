@@ -64,9 +64,12 @@ app.use('/api/returns', returnRoutes);
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok', time: new Date().toISOString() }));
 
-app.use(errorHandler);
+app.use(async (_req, _res, next) => {
+  try { await connectDB(); } catch { /* DB unreachable — errors surface in controllers */ }
+  next();
+});
 
-connectDB();
+app.use(errorHandler);
 
 if (!process.env.VERCEL && process.env.NODE_ENV !== 'production') {
   const PORT = process.env.PORT || 9191;

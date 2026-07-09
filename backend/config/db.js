@@ -1,14 +1,24 @@
 import mongoose from 'mongoose';
 
+let cached = global._mongooseConn;
+if (!cached) cached = global._mongooseConn = { conn: null, promise: null };
+
 const connectDB = async () => {
-  try {
-    const uri = process.env.MONGO_URI || process.env.MONGODB_URI;
-    const conn = await mongoose.connect(uri, { serverSelectionTimeoutMS: 5000 });
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
-  } catch (error) {
-    console.error(`DB Error: ${error.message}`);
-    console.log('Server will continue without database connection');
-  }
+  if (cached.conn) return cached.conn;
+  if (cached.promise) return cached.promise;
+
+  const uri = process.env.MONGO_URI || process.env.MONGODB_URI;
+  cached.promise = mongoose.connect(uri, { serverSelectionTimeoutMS: 15000 }).then(m => {
+    console.log(`MongoDB Connected: ${m.connection.host}`);
+    return m;
+  }).catch(err => {
+    console.error(`DB Error: ${err.message}`);
+    cached.promise = null;
+    throw err;
+  });
+
+  cached.conn = await cached.promise;
+  return cached.conn;
 };
 
 export default connectDB;
