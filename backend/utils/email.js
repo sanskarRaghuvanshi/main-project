@@ -16,6 +16,15 @@ export const sendOTP = async (email, otp) => {
   });
 };
 
+export const sendReturnConfirmation = async (email, returnReq) => {
+  await transporter.sendMail({
+    from: `"Opal Beauty" <${process.env.EMAIL_USER}>`,
+    to: email,
+    subject: 'Return Request Received - Opal',
+    html: `<div style="font-family:Inter;padding:30px;background:#FFF5F7;border-radius:16px"><h1 style="color:#FF4D8B;font-family:'Playfair Display'">Return Request Received</h1><p>Your return for ${returnReq.items?.length || 0} item(s) has been submitted.</p><p>Reason: ${returnReq.reason}</p><p>Refund Amount: ₹${returnReq.refundAmount}</p><p>We will review and notify you within 2-3 business days.</p></div>`,
+  });
+};
+
 export const sendOrderConfirmation = async (email, order) => {
   await transporter.sendMail({
     from: `"Opal Beauty" <${process.env.EMAIL_USER}>`,
